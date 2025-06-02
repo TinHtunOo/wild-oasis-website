@@ -1,6 +1,8 @@
 import { Suspense } from "react";
-import CabinList from "../_components/CabinList";
-import Spinner from "../_components/Spinner";
+import CabinList from "@/app/_components/CabinList";
+import Spinner from "@/app/_components/Spinner";
+import Filter from "@/app/_components/Filter";
+import ReservationReminder from "../_components/ReservationReminder";
 
 export const revalidate = 3600;
 
@@ -8,7 +10,8 @@ export const metadata = {
   title: "Cabins",
 };
 
-export default function Page() {
+export default function Page({ searchParams }) {
+  const filter = searchParams?.capacity ?? "all";
   // CHANGE
   return (
     <div>
@@ -23,8 +26,12 @@ export default function Page() {
         home away from home. The perfect spot for a peaceful, calm vacation.
         Welcome to paradise.
       </p>
-      <Suspense fallback={<Spinner />}>
-        <CabinList />
+      <div className="flex justify-end mb-5">
+        <Filter />
+      </div>
+      <Suspense fallback={<Spinner />} key={filter}>
+        <CabinList filter={filter} />
+        <ReservationReminder />
       </Suspense>
     </div>
   );
